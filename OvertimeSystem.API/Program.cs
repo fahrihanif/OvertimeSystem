@@ -1,11 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using OvertimeSystem.API.Data;
+using OvertimeSystem.API.Repositories.Data;
+using OvertimeSystem.API.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Register DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<OvertimeDbContext>(option => option.UseSqlServer(connectionString));
+builder.Services.AddDbContext<OvertimeSystemDbContext>(options => options.UseSqlServer(connectionString));
+
+// Register Repository Service
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI

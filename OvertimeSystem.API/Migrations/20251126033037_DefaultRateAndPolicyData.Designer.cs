@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OvertimeSystem.API.Data;
 
@@ -10,10 +11,12 @@ using OvertimeSystem.API.Data;
 
 namespace OvertimeSystem.API.Migrations
 {
-    [DbContext(typeof(OvertimeDbContext))]
-    partial class OvertimeDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(OvertimeSystemDbContext))]
+    [Migration("20251126033037_DefaultRateAndPolicyData")]
+    partial class DefaultRateAndPolicyData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,48 +27,51 @@ namespace OvertimeSystem.API.Migrations
 
             modelBuilder.Entity("OvertimeSystem.API.Models.Account", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_id");
 
                     b.Property<DateTime?>("Expired")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("expired");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("is_active");
 
                     b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("is_used");
 
-                    b.Property<short?>("Otp")
-                        .HasColumnType("smallint");
+                    b.Property<long?>("Otp")
+                        .HasColumnType("bigint")
+                        .HasColumnName("otp");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("password");
 
-                    b.HasKey("Id");
+                    b.HasKey("EmployeeId");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("Accounts");
+                    b.ToTable("tbl_account", (string)null);
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.AccountRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("account_id");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("role_id");
 
                     b.HasKey("Id");
 
@@ -74,35 +80,37 @@ namespace OvertimeSystem.API.Migrations
                     b.HasIndex("AccountId", "RoleId")
                         .IsUnique();
 
-                    b.ToTable("AccountRoles");
+                    b.ToTable("tbl_account_role", (string)null);
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.ApprovedOvertime", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<decimal>("CalculatedCost")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<byte[]>("Document")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("calculated_cost");
 
                     b.Property<Guid>("RateId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("rate_id");
 
                     b.Property<Guid>("RequestId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("request_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("status");
 
                     b.Property<short>("TotalHours")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("total_hours");
 
                     b.HasKey("Id");
 
@@ -111,47 +119,69 @@ namespace OvertimeSystem.API.Migrations
                     b.HasIndex("RequestId")
                         .IsUnique();
 
-                    b.ToTable("ApprovedOvertime");
+                    b.ToTable("tbl_approved_overtime", (string)null);
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("department");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("gender");
 
                     b.Property<DateTime>("JoinedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("joined_date");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("last_name");
 
                     b.Property<Guid?>("ManagerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("manager_id");
 
                     b.Property<string>("Nik")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)")
+                        .HasColumnName("nik");
 
-                    b.Property<long>("Position")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("position");
 
                     b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("salary");
 
                     b.HasKey("Id");
 
@@ -160,75 +190,89 @@ namespace OvertimeSystem.API.Migrations
                     b.HasIndex("Nik")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("tbl_employee", (string)null);
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.OvertimeBudget", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("BudgetMonth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("budget_month");
 
                     b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_id");
 
-                    b.Property<short>("HoursConsumed")
-                        .HasColumnType("smallint");
+                    b.Property<int>("HoursConsumed")
+                        .HasColumnType("int")
+                        .HasColumnName("hours_consumed");
 
-                    b.Property<short>("InitialHours")
-                        .HasColumnType("smallint");
+                    b.Property<int>("InitialHours")
+                        .HasColumnType("int")
+                        .HasColumnName("initial_hours");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId", "BudgetMonth")
                         .IsUnique();
 
-                    b.ToTable("OvertimeBudgets");
+                    b.ToTable("tbl_overtime_budget", (string)null);
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.OvertimePolicy", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("is_active");
 
-                    b.Property<short>("MaxDailyHours")
-                        .HasColumnType("smallint");
+                    b.Property<int>("MaxDailyHours")
+                        .HasColumnType("int")
+                        .HasColumnName("max_daily_hours");
 
-                    b.Property<short>("MaxWeeklyHours")
-                        .HasColumnType("smallint");
+                    b.Property<int>("MaxWeeklyHours")
+                        .HasColumnType("int")
+                        .HasColumnName("max_weekly_hours");
 
                     b.Property<string>("PolicyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("policy_name");
 
                     b.Property<TimeSpan>("WeekdayStartTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time")
+                        .HasColumnName("weekday_start_time");
 
                     b.Property<TimeSpan>("WeekendEndTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time")
+                        .HasColumnName("weekend_end_time");
 
                     b.Property<TimeSpan>("WeekendStartTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time")
+                        .HasColumnName("weekend_start_time");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OvertimePolicies");
+                    b.ToTable("tbl_overtime_policy", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("a0000000-0000-0000-0000-000000000001"),
                             IsActive = true,
-                            MaxDailyHours = (short)4,
-                            MaxWeeklyHours = (short)18,
-                            PolicyName = "Standard Labor Law Compliance",
+                            MaxDailyHours = 4,
+                            MaxWeeklyHours = 18,
+                            PolicyName = "Standard",
                             WeekdayStartTime = new TimeSpan(0, 19, 0, 0, 0),
                             WeekendEndTime = new TimeSpan(0, 17, 0, 0, 0),
                             WeekendStartTime = new TimeSpan(0, 9, 0, 0, 0)
@@ -239,154 +283,161 @@ namespace OvertimeSystem.API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<int>("BaseDivisor")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("base_divisor");
 
                     b.Property<string>("DayType")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("day_type");
 
-                    b.Property<short>("HourOrder")
-                        .HasColumnType("smallint");
+                    b.Property<int>("HourOrder")
+                        .HasColumnType("int")
+                        .HasColumnName("hour_order");
 
                     b.Property<decimal>("Multiplier")
-                        .HasColumnType("decimal(4, 2)");
+                        .HasColumnType("decimal(4, 2)")
+                        .HasColumnName("multiplier");
 
                     b.Property<string>("RateName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("rate_name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OvertimeRates");
+                    b.ToTable("tbl_overtime_rate", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("eea400e3-05fc-4953-a03b-dea2e5ae6c9d"),
+                            Id = new Guid("a68ab98b-04a1-4328-8bc2-1dee00cef5fc"),
                             BaseDivisor = 173,
                             DayType = "NORMAL",
-                            HourOrder = (short)1,
+                            HourOrder = 1,
                             Multiplier = 1.5m,
                             RateName = "WD 1st Hr"
                         },
                         new
                         {
-                            Id = new Guid("729428f5-e145-4c94-8197-cd826c141b19"),
+                            Id = new Guid("a2b7ab11-ac75-4697-a1b6-688273e33f45"),
                             BaseDivisor = 173,
                             DayType = "NORMAL",
-                            HourOrder = (short)2,
+                            HourOrder = 2,
                             Multiplier = 2.0m,
                             RateName = "WD 2nd+ Hr"
                         },
                         new
                         {
-                            Id = new Guid("cc4b5dc1-4897-4e63-8b90-42226d99e665"),
+                            Id = new Guid("3e755ce3-f7a1-44b8-8fb3-dd4e79f32080"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)1,
+                            HourOrder = 1,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 1"
                         },
                         new
                         {
-                            Id = new Guid("88c79f2f-5f46-49e8-b129-e0b2bac2f51c"),
+                            Id = new Guid("2f4df0c8-b0fc-4262-9021-dcd72370e1e2"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)2,
+                            HourOrder = 2,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 2"
                         },
                         new
                         {
-                            Id = new Guid("fcb1ee97-dda1-49f1-a2be-ac62379ebc62"),
+                            Id = new Guid("6d8a23d2-b479-4869-9fa6-608b91d93534"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)3,
+                            HourOrder = 3,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 3"
                         },
                         new
                         {
-                            Id = new Guid("1e6de3d8-4397-4bd9-a634-ea23705f0346"),
+                            Id = new Guid("520112fd-9460-46ed-b5fb-ae36385e197e"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)4,
+                            HourOrder = 4,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 4"
                         },
                         new
                         {
-                            Id = new Guid("a1b0ab22-346a-4999-b281-c7967c4e2a0a"),
+                            Id = new Guid("c5e12625-cd58-44b6-bc2d-885078dab00e"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)5,
+                            HourOrder = 5,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 5"
                         },
                         new
                         {
-                            Id = new Guid("b4a2eb51-fc02-4693-ae92-91c1e213a9e9"),
+                            Id = new Guid("42341d1c-6fec-4a2e-b91a-7cba3404a14b"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)6,
+                            HourOrder = 6,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 6"
                         },
                         new
                         {
-                            Id = new Guid("241770ff-7e65-4421-a89a-447c1cfb825c"),
+                            Id = new Guid("5ef2a883-d36a-4780-af9b-97892fb90409"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)7,
+                            HourOrder = 7,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 7"
                         },
                         new
                         {
-                            Id = new Guid("327e8bfa-d4c5-414d-b87d-efa1be51d788"),
+                            Id = new Guid("47965aa1-5ab5-46f9-9d0f-2c346fa5e140"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)8,
+                            HourOrder = 8,
                             Multiplier = 2.0m,
                             RateName = "WH Hr 8"
                         },
                         new
                         {
-                            Id = new Guid("b8d5cec1-1322-4778-9f86-f82d58b9b94d"),
+                            Id = new Guid("dc7faf56-8c64-4786-a9ee-6d5988023c33"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)9,
+                            HourOrder = 9,
                             Multiplier = 3.0m,
-                            RateName = "WH Hr 9"
+                            RateName = "WD Hr 9"
                         },
                         new
                         {
-                            Id = new Guid("f2e301bd-7dc6-4ad2-84a7-77d98ce327bd"),
+                            Id = new Guid("06c93357-eddf-48ee-90c9-448ee1508289"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)10,
+                            HourOrder = 10,
                             Multiplier = 4.0m,
                             RateName = "WH Hr 10"
                         },
                         new
                         {
-                            Id = new Guid("8009ba9a-9546-45d9-b70d-ee518b6f1935"),
+                            Id = new Guid("d34bbe1a-27eb-4ff8-be02-b1a1f2d9383d"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)11,
+                            HourOrder = 11,
                             Multiplier = 4.0m,
                             RateName = "WH Hr 11"
                         },
                         new
                         {
-                            Id = new Guid("01e1e8bb-d295-47e8-9bcf-4901194ab389"),
+                            Id = new Guid("890a8818-d874-42e7-8c6c-3ef341dbe5bd"),
                             BaseDivisor = 173,
                             DayType = "WEEKEND_HOLIDAY",
-                            HourOrder = (short)12,
+                            HourOrder = 12,
                             Multiplier = 4.0m,
                             RateName = "WH Hr 12"
                         });
@@ -396,42 +447,54 @@ namespace OvertimeSystem.API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("comment");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("date");
 
                     b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_id");
 
                     b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time")
+                        .HasColumnName("end_time");
 
                     b.Property<Guid>("PolicyId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("policy_id");
 
                     b.Property<string>("RequestType")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("request_type");
 
                     b.Property<short>("RequestedHours")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("requested_hours");
 
                     b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time")
+                        .HasColumnName("start_time");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("status");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("timestamp");
 
                     b.HasKey("Id");
 
@@ -439,22 +502,25 @@ namespace OvertimeSystem.API.Migrations
 
                     b.HasIndex("PolicyId");
 
-                    b.ToTable("OvertimeRequests");
+                    b.ToTable("tbl_overtime_request", (string)null);
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("tbl_role", (string)null);
 
                     b.HasData(
                         new
@@ -479,7 +545,7 @@ namespace OvertimeSystem.API.Migrations
                     b.HasOne("OvertimeSystem.API.Models.Employee", "Employee")
                         .WithOne("Account")
                         .HasForeignKey("OvertimeSystem.API.Models.Account", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -490,13 +556,13 @@ namespace OvertimeSystem.API.Migrations
                     b.HasOne("OvertimeSystem.API.Models.Account", "Account")
                         .WithMany("AccountRoles")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OvertimeSystem.API.Models.Role", "Role")
                         .WithMany("AccountRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -507,7 +573,7 @@ namespace OvertimeSystem.API.Migrations
             modelBuilder.Entity("OvertimeSystem.API.Models.ApprovedOvertime", b =>
                 {
                     b.HasOne("OvertimeSystem.API.Models.OvertimeRate", "Rate")
-                        .WithMany("ApprovedOvertimeRecords")
+                        .WithMany("ApprovedOvertimes")
                         .HasForeignKey("RateId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -526,9 +592,8 @@ namespace OvertimeSystem.API.Migrations
             modelBuilder.Entity("OvertimeSystem.API.Models.Employee", b =>
                 {
                     b.HasOne("OvertimeSystem.API.Models.Employee", "Manager")
-                        .WithMany("Subordinates")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany("Employees")
+                        .HasForeignKey("ManagerId");
 
                     b.Navigation("Manager");
                 });
@@ -570,14 +635,13 @@ namespace OvertimeSystem.API.Migrations
 
             modelBuilder.Entity("OvertimeSystem.API.Models.Employee", b =>
                 {
-                    b.Navigation("Account")
-                        .IsRequired();
+                    b.Navigation("Account");
+
+                    b.Navigation("Employees");
 
                     b.Navigation("OvertimeBudgets");
 
                     b.Navigation("OvertimeRequests");
-
-                    b.Navigation("Subordinates");
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.OvertimePolicy", b =>
@@ -587,13 +651,12 @@ namespace OvertimeSystem.API.Migrations
 
             modelBuilder.Entity("OvertimeSystem.API.Models.OvertimeRate", b =>
                 {
-                    b.Navigation("ApprovedOvertimeRecords");
+                    b.Navigation("ApprovedOvertimes");
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.OvertimeRequest", b =>
                 {
-                    b.Navigation("ApprovedOvertime")
-                        .IsRequired();
+                    b.Navigation("ApprovedOvertime");
                 });
 
             modelBuilder.Entity("OvertimeSystem.API.Models.Role", b =>

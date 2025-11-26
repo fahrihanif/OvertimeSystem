@@ -3,7 +3,8 @@ namespace OvertimeSystem.API.Models;
 public class Role
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = String.Empty;
     
-    public ICollection<AccountRole> AccountRoles { get; set; } = new List<AccountRole>();
+    // Cardinality
+    public ICollection<AccountRole>? AccountRoles { get; set; }
 }

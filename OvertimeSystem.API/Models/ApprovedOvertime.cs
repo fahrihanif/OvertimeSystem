@@ -1,3 +1,5 @@
+using OvertimeSystem.API.Enums;
+
 namespace OvertimeSystem.API.Models;
 
 public class ApprovedOvertime
@@ -8,8 +10,8 @@ public class ApprovedOvertime
     public short TotalHours { get; set; }
     public decimal CalculatedCost { get; set; }
     public ApprovedOvertimeStatus Status { get; set; } 
-    public byte[] Document { get; set; }
-
-    public OvertimeRequest Request { get; set; }
-    public OvertimeRate Rate { get; set; }
+    
+    // Cardinality
+    public OvertimeRequest? Request { get; set; }
+    public OvertimeRate? Rate { get; set; }
 }
