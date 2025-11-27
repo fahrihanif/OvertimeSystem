@@ -5,7 +5,7 @@ namespace OvertimeSystem.API.Models;
 public class Employee
 {
     public Guid Id { get; set; }
-    public string Nik { get; set; } = string.Empty;
+    public int Nik { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public decimal Salary { get; set; }

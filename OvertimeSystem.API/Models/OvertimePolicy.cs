@@ -6,9 +6,9 @@ public class OvertimePolicy
     public string PolicyName { get; set; } = string.Empty;
     public ushort MaxDailyHours { get; set; }
     public ushort MaxWeeklyHours { get; set; }
-    public TimeSpan WeekdayStartTime { get; set; }
-    public TimeSpan WeekendStartTime { get; set; }
-    public TimeSpan WeekendEndTime { get; set; }
+    public TimeOnly WeekdayStartTime { get; set; }
+    public TimeOnly WeekendStartTime { get; set; }
+    public TimeOnly WeekendEndTime { get; set; }
     public bool IsActive { get; set; }
     
     // Cardinality

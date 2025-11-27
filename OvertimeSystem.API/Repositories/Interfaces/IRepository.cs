@@ -4,7 +4,7 @@ public interface IRepository<TEntity>
 {
     Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken);
     Task<TEntity?> GetByIdAsync (Guid id, CancellationToken cancellationToken);
-    Task CreateAsync(TEntity employee, CancellationToken cancellationToken);
-    Task UpdateAsync(TEntity employee);
-    Task DeleteAsync(TEntity employee);
+    Task CreateAsync(TEntity entity, CancellationToken cancellationToken);
+    Task UpdateAsync(TEntity entity);
+    Task DeleteAsync(TEntity entity);
 }

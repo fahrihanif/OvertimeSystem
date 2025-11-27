@@ -12,7 +12,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.Nik).HasColumnName("nik")
-            .IsRequired().HasMaxLength(6);
+            .IsRequired();
         builder.Property(e => e.FirstName).HasColumnName("first_name")
             .HasMaxLength(50);
         builder.Property(e => e.LastName).HasColumnName("last_name")

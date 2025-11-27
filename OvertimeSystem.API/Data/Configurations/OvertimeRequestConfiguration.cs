@@ -22,7 +22,6 @@ public class OvertimeRequestConfiguration : IEntityTypeConfiguration<OvertimeReq
             .HasConversion<string>()
             .HasMaxLength(20);
         builder.Property(r => r.Comment).HasColumnName("comment").HasMaxLength(255);
-        builder.Property(r => r.Timestamp).HasColumnName("timestamp");
         builder.Property(r => r.RequestType).HasColumnName("request_type")
             .HasConversion<string>()
             .HasMaxLength(20);

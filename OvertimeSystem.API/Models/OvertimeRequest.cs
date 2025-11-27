@@ -7,13 +7,12 @@ public class OvertimeRequest
     public Guid Id { get; set; }
     public Guid EmployeeId { get; set; }
     public Guid PolicyId { get; set; }
-    public DateTime Date { get; set; }
-    public TimeSpan StartTime { get; set; }
-    public TimeSpan EndTime { get; set; }
+    public DateOnly Date { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
     public ushort RequestedHours { get; set; }
     public OvertimeStatus Status { get; set; } 
     public string Comment { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; }
     public OvertimeDayStatus RequestType { get; set; } 
     
     // Cardinality

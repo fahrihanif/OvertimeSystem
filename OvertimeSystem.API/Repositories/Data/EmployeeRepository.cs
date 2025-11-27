@@ -9,10 +9,11 @@ public class EmployeeRepository : Repository<Employee>, IEmployeeRepository
 {
     public EmployeeRepository(OvertimeSystemDbContext context) : base(context)
     {
-    }
+    }   
 
-    public async Task<IEnumerable<Employee>> GetByPosition(string position)
+    public async Task<int> GetLastEmployeeId(CancellationToken cancellationToken)
     {
-        return await _context.Employees.Where(e => e.Position == position).ToListAsync();
+        var lastEmployee = await _context.Employees.OrderByDescending(o => o.Nik).FirstOrDefaultAsync(cancellationToken);
+        return lastEmployee?.Nik ?? 18000;
     }
 }
