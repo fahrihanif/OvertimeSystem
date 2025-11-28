@@ -25,15 +25,15 @@ public static class OvertimeDataSeeder
     {
         return new List<OvertimePolicy>
         {
-            new  OvertimePolicy
+            new OvertimePolicy
             {
                 Id = PolicyId,
                 PolicyName = "Standard",
                 MaxDailyHours = 4,
                 MaxWeeklyHours = 18,
-                WeekdayStartTime = new TimeSpan(19, 0, 0),
-                WeekendStartTime = new TimeSpan(9, 0, 0),
-                WeekendEndTime = new TimeSpan(17, 0, 0),
+                WeekdayStartTime = new TimeOnly(19, 0, 0),
+                WeekendStartTime = new TimeOnly(9, 0, 0),
+                WeekendEndTime = new TimeOnly(17, 0, 0),
                 IsActive = true,
             }
         };

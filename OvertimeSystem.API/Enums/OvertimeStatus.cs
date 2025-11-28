@@ -4,6 +4,5 @@ public enum OvertimeStatus
 {
     Pending,
     Approved,
-    Rejected,
-    InfoRequired
+    Rejected
 }

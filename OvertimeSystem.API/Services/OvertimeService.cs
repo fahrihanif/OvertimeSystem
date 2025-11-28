@@ -30,33 +30,33 @@ public class OvertimeService : IOvertimeService
     public async Task OvertimeRequestAsync(OvertimeRequestDto request, CancellationToken cancellationToken)
     {
         var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId, cancellationToken);
-        if (employee == null)
+        if (employee is null)
         {
-            throw new Exception("Employee not found");
+            throw new NullReferenceException("Employee not found");
         }
         await _unitOfWork.ClearTracksAsync(cancellationToken);
 
         var requestedHours = Convert.ToUInt16(request.EndTime - request.StartTime);
         if (requestedHours > 4)
         {
-            throw new Exception("Requested hours must be less than 4 hours per day");
+            throw new ArgumentException("Requested hours must be less than 4 hours per day");
         }
         
         var defaultPolicy = await _overtimePolicyRepository.GetActivePolicyAsync(cancellationToken);
         if (defaultPolicy is null)
         {
-            throw new Exception("Default policy not found");
+            throw new NullReferenceException("Default policy not found");
         }
         var requestType = GetOvertimeDayStatus(request.Date);
         if (requestType == OvertimeDayStatus.NORMAL)
         {
             if (request.StartTime < defaultPolicy.WeekdayStartTime)
-                throw new Exception($"Overtime on weekdays must start at or after {defaultPolicy.WeekdayStartTime}.");
+                throw new ArgumentException($"Overtime on weekdays must start at or after {defaultPolicy.WeekdayStartTime}.");
         }
         if (requestType == OvertimeDayStatus.WEEKEND_HOLIDAY)
         {
             if (request.StartTime < defaultPolicy.WeekendStartTime || request.EndTime > defaultPolicy.WeekendEndTime)
-                throw new Exception($"Overtime on weekends must be between {defaultPolicy.WeekendStartTime} and {defaultPolicy.WeekendEndTime}.");
+                throw new ArgumentException($"Overtime on weekends must be between {defaultPolicy.WeekendStartTime} and {defaultPolicy.WeekendEndTime}.");
         }
         
         var getMonthFirstDate = GetMonthFirstDate(request.Date);
@@ -81,7 +81,7 @@ public class OvertimeService : IOvertimeService
 
         if (Convert.ToInt16(overtimeBudget.HoursConsumed - requestedHours) < 0)
         {
-            throw new Exception($"Requested hours ({requestedHours}) exceed the remaining monthly budget ({overtimeBudget.HoursConsumed} hours).");
+            throw new ArgumentException($"Requested hours ({requestedHours}) exceed the remaining monthly budget ({overtimeBudget.HoursConsumed} hours).");
         }
         
         overtimeBudget.HoursConsumed -= requestedHours;
@@ -107,6 +107,11 @@ public class OvertimeService : IOvertimeService
                 await _overtimeBudgetRepository.UpdateAsync(overtimeBudget);
             },
             cancellationToken);
+    }
+
+    public Task OvertimeApprovalAsync(OvertimeApprovalDto request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     private OvertimeDayStatus GetOvertimeDayStatus(DateOnly date)

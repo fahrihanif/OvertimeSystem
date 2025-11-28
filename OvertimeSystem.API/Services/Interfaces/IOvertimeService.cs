@@ -6,4 +6,5 @@ namespace OvertimeSystem.API.Services.Interfaces;
 public interface IOvertimeService
 {
     Task OvertimeRequestAsync(OvertimeRequestDto request, CancellationToken cancellationToken);
+    Task OvertimeApprovalAsync(OvertimeApprovalDto request, CancellationToken cancellationToken);
 }

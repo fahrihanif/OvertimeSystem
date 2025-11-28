@@ -43,7 +43,7 @@ public class OvertimePolicyService : IOvertimePolicyService
 
         if (policy is null)
         {
-            throw new Exception("Policy Id not found");
+            throw new NullReferenceException("Policy Id not found");
         }
         
         policy.PolicyName = requestDto.Name;
@@ -65,7 +65,7 @@ public class OvertimePolicyService : IOvertimePolicyService
 
         if (policy is null)
         {
-            throw new Exception("Policy Id not found");
+            throw new NullReferenceException("Policy Id not found");
         }
         
         await _unitOfWork.ClearTracksAsync(cancellationToken);
@@ -82,7 +82,7 @@ public class OvertimePolicyService : IOvertimePolicyService
 
         if (!getPolicies.Any())
         {
-            throw new Exception("No Policies found");
+            throw new NullReferenceException("No policies found");
         }
 
         var policiesMap = getPolicies.Select(p => new PolicyResponseDto(
@@ -105,7 +105,7 @@ public class OvertimePolicyService : IOvertimePolicyService
 
         if (getPolicy is null)
         {
-            throw new Exception("Policy Id not found");
+           throw new NullReferenceException("Policy Id not found");
         }
 
         var policyMap = new PolicyResponseDto(
@@ -128,7 +128,7 @@ public class OvertimePolicyService : IOvertimePolicyService
 
         if (getPolicy is null)
         {
-            throw new Exception("Policy Id not found");
+            throw new NullReferenceException("Policy Id not found");
         }
         await _unitOfWork.ClearTracksAsync(cancellationToken);
         
